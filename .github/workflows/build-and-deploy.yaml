@@ -38,21 +38,21 @@ jobs:
         run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
 
       - id: docker-push-tagged
-        name: Tag Docker image and push to Google Artifact Registry
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
+          context: .
+          file: ./Dockerfile
           push: true
-          tags: |
-             me-west1-docker.pkg.dev/415226216547/test/testwebapi:${{ steps.get-tag.outputs.short_ref }}
-             me-west1-docker.pkg.dev/415226216547/test/testwebapi:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          
       - id: populate-configs
         uses: 73h/gae-app-yaml-replace-env-variables@v0.3
-        
         with:
-          app_yaml_path: "app.yaml"
+          app_yaml_path: ./app.yaml
 
       - id: deploy
         name: Deploy Docker image to App Engine
         uses: google-github-actions/deploy-appengine@v1
         with:
-          deliverables: 'app.yaml'
+          deliverables: ./app.yaml
