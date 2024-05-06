@@ -41,7 +41,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Dockerfile
+          file: ./TestWebApi/Dockerfile
           push: true
           tags: latest
         
