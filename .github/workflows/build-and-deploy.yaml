@@ -43,8 +43,8 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: latest
+        
           
       - id: populate-configs
         uses: 73h/gae-app-yaml-replace-env-variables@v0.3
