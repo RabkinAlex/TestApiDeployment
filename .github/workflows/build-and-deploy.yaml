@@ -22,8 +22,8 @@ jobs:
         uses: google-github-actions/auth@v0
         with:
           token_format: access_token
-          workload_identity_provider: ${{ secrets.SECRET_GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.SECRET_GCP_SERVICE_ACCOUNT }}
+          workload_identity_provider: projects/415226216547/locations/global/workloadIdentityPools/my-pool/providers/github-01
+          service_account: githubacc-274@bright-airport-419808.iam.gserviceaccount.com
           access_token_lifetime: 300s
 
       - name: Login to Artifact Registry
