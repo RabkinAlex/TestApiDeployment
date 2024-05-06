@@ -49,10 +49,10 @@ jobs:
         uses: 73h/gae-app-yaml-replace-env-variables@v0.3
         
         with:
-          app_yaml_path: ".github/configs/app.yaml"
+          app_yaml_path: "app.yaml"
 
       - id: deploy
         name: Deploy Docker image to App Engine
         uses: google-github-actions/deploy-appengine@v1
         with:
-          deliverables: '.github/configs/app.yaml'
+          deliverables: 'app.yaml'
