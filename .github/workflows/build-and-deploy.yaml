@@ -15,12 +15,11 @@ jobs:
     steps:
       - id: checkout
         name: Checkout
-         - uses:actions/checkout@v4
-         - uses:google-github-actions/auth@v2
+        uses: actions/checkout@v4
 
       - id: auth
         name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v0
+        uses: google-github-actions/auth@v2
         with:
           token_format: access_token
           workload_identity_provider: projects/415226216547/locations/global/workloadIdentityPools/my-pool/providers/github-01
@@ -39,21 +38,21 @@ jobs:
         run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
 
       - id: docker-push-tagged
-        name: Tag Docker image and push to Google Artifact Registry
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
+          context: .
+          file: ./TestWebApi/Dockerfile
           push: true
-          tags: |
-             me-west1-docker.pkg.dev/415226216547/test/testwebapi:${{ steps.get-tag.outputs.short_ref }}
-             me-west1-docker.pkg.dev/415226216547/test/testwebapi:latest
+          tags: latest
+        
+          
       - id: populate-configs
         uses: 73h/gae-app-yaml-replace-env-variables@v0.3
-        
         with:
-          app_yaml_path: ".github/configs/app.yaml"
+          app_yaml_path: ./app.yaml
 
       - id: deploy
         name: Deploy Docker image to App Engine
         uses: google-github-actions/deploy-appengine@v1
         with:
-          deliverables: '.github/configs/app.yaml'
+          deliverables: ./app.yaml
